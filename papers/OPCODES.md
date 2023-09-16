@@ -1,0 +1,44 @@
+# Atom Processor MkII: Opcodes
+- HLT (0x00): Sets the halted flag to true.
+- NOP (0x01): Does nothing
+- LDA (0x02) \<address16>: Loads a absolute addressed value into register AC
+- LDX (0x03) \<address16>: Loads a absolute addressed value into register XR
+- LDY (0x04) \<address16>: Loads a absolute addressed value into register YR
+- LDIA (0x05) \<number8>: Loads a immediate value into register AC
+- LDIX (0x06) \<number8>: Loads a immediate value into register XR
+- LDIY (0x07) \<number8>: Loads a immediate value into register YR
+- STA (0x08) \<address16>: Stores a value of AC into the specified address
+- STX (0x09) \<address16>: Stores a value of XR into the specified address
+- STY (0x0A) \<address16>: Stores a value of YR into the specified address
+- ADA (0x0B): Doubles a value of register AC or (in practice) sums AC with itself and outputs into AC and sets flags.
+- ADX (0x0C): Sums AC with XR and outputs that value into AC and sets flags.
+- ADY (0x0D): Sums AC with YR and outputs that value into AC and sets flags.
+- SUA (0x0E): Sets AC to 0 or subtracts AC with itself into AC and outputs into AC and sets flags. NOTE: the carry flag is inverted here
+- SUX (0x0F): Subtracts AC with XR and outputs into AC and sets flags. NOTE: the carry flag is inverted here
+- SUY (0x10): Subtracts AC with YR and outputs into AC and sets flags. NOTE: the carry flag is inverted here
+- NANA (0x11): Xors AC with 255 and outputs into AC and sets flags or (in practice) makes a NAND operation `(input1 & input2) ^ 255` with AC and AC and outputs into AC and sets flags.
+- NANX (0x12): Makes a NAND operation with AC and XR and outputs into AC and sets flags.
+- NANY (0x13): Makes a NAND operation with AC and YR and outputs into AC and sets flags.
+- PUSHA (0x14): Push a value from AC to stack
+- PUSHX (0x15): Push a value from XR to stack
+- PUSHY (0x16): Push a value from YR to stack
+- POPA (0x17): Pop a value from stack to AC
+- POPX (0x18): Pop a value from stack to XR
+- POPY (0x19): Pop a value from stack to YR
+- CMA (0x1A): Sets the zero flag to true or (in practice) subtracts AC with AC and set flags.
+- CMX (0x1B): Subtracts AC with XR and set flags.
+- CMY (0x1C): Subtracts AC with YR and set flags.
+- JMP (0x1D) \<address16>: Sets IP to the specified address
+- JZ (0x1E) \<address16>: Sets IP to the specified address only if the zero flag is true (the processor still needs to read the address)
+- JC (0x1F) \<address16>: Sets IP to the specified address only if the carry flag is true (the processor still needs to read the address)
+- CALL (0x20) \<address16>: Reads a address, push the current IP high byte to the stack then push low byte to the stack and after that jumps to the specified address.
+- RET (0x21): Pops the high byte address from the stack, then the low byte and then jumps to that address.
+- INT (0x22) \<argument8>: Triggers a maskable interrupt with the specified argument. See [Extra: Interrupts](./EXTRA.md#interrupts)
+- RETI (0x23) \<argument8>: Returns from a interrupt. See [Extra: Interrupts](./EXTRA.md#interrupts)
+- CZF (0x24): Sets the zero flag to false
+- CCF (0x25): Sets the carry flag to false
+- CIF (0x26): Sets the interrupt flag to false
+- SZF (0x27): Sets the zero flag to true
+- SCF (0x28): Sets the carry flag to true
+- SIF (0x29): Sets the interrupt flag to true
+- RST (0x2A): Resets the processor to it's default state. See [Extra: Resetting the processor](./EXTRA.md#resetting)
