@@ -100,8 +100,8 @@ bool zf = r == 0; // zero flag respect 8-bit ranges.
 ```
 as `AC` being the value of AC register, `ci` as being the carry flag before the operation or 'carry in', `r` being the result in 8-bit range, `co` being the calculated carry flag or 'carry out' and `zf` as the calculated zero flag.
 
-### SubtACtion: {#sub-op}
-SubtACtion in the Atom Fluorine is a basically addition but with the number N inverted (xor with 255) and carry in and out inverted.
+### Subtraction: {#sub-op}
+Subtraction in the Atom Fluorine is a basically addition but with the number N inverted (xor with 255) and carry in and out inverted.
 Given a 8-bit unsigned integer N. (number) This formula or C code is used:
 ```c
 uint_8t r = (uint8_t)AC + (N ^ 255) + !(bool)ci;
