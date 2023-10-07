@@ -157,7 +157,7 @@ const PROCESSOR_OPERATIONS = [ // the array itself is a instruction decoder, whi
         cpu.maskable_interrupt(arg1);
     },
     function RETI(cpu){
-        const special = cpu.pop();
+        const flag = cpu.pop();
         const registerY = cpu.pop();
         const registerX = cpu.pop();
         const registerA = cpu.pop();
@@ -167,7 +167,7 @@ const PROCESSOR_OPERATIONS = [ // the array itself is a instruction decoder, whi
         cpu.registers[0] = registerA;
         cpu.registers[1] = registerX;
         cpu.registers[2] = registerY;
-        cpu.registers[4] = special;
+        cpu.registers[4] = flag;
     },
     function CZF(cpu){
         cpu.setFlag(PROCESSOR_FLAGS.ZERO, false);
@@ -233,7 +233,7 @@ class Processor extends EventTarget{
     halted = false
 
     /**
-     * Returns a flag stored in the "Special Register"
+     * Returns a flag stored in the "Flag Register"
      * @param {number} flag `PROCESSOR_FLAGS` flag
      * @returns {boolean} The stored flag
      */
@@ -242,12 +242,12 @@ class Processor extends EventTarget{
         return Boolean(flagRegisterValue & flag);
     }
     /**
-     * Rewrites a flag in the "Special Register"
+     * Rewrites a flag in the "Flag Register"
      * @param {number} flag `PROCESSOR_FLAGS` flag
      * @param {boolean} value The new flag value
      */
     setFlag(flag, value){
-        // register 5 (index 4) is the flags register, aka "Special Register"
+        // register 5 (index 4) is the flags register, aka "Flag Register"
         if(value){
             this.registers[4] |= flag;
         }else{
