@@ -11,6 +11,8 @@ SPO (Stack Pointer Offset): 8-bit register, by default holds 0xFF (255).
 When the processor needs to push something to the stack, the processor will:
 1. Add SPO and BSP which result in the address where the value will be written.
 2. Decrement SPO by 1.
+
+C code:
 ```c
 // #define BSP 0x0400
 // uint_8t memory[0xFFFF]; // example memory array
@@ -25,6 +27,8 @@ void push(uint_8t value){
 When the processor needs to pop something from stack, the processor will:
 1. Increment SPO by 1, 
 2. Add SPO with BSP which result in the address where the value will be read.
+
+C code:
 ```c
 // #define BSP 0x0400
 // uint_8t memory[0xFFFF]; // example memory array
