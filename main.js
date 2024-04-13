@@ -337,7 +337,7 @@ function load(){
                 [/./, "string"]
             ],
             defineConstants: [
-                [/db/i, "constant"]
+                [/db|alc/i, "constant"]
             ],
             controllers: [
                 [/^(int)|(reti)|(ret)|(hlt)\b/i, "keyword"],
