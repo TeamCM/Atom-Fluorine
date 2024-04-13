@@ -88,11 +88,23 @@ const toCharCode = str => Array.of(...str).map(s => s.charCodeAt(0));
 function asm2code(str,offset){
     const markedAddresses = {};
     const labelsAddresses = {};
+    let startingFreeAddress = 0x10;
     const lines = str.split("\n");
     const code = [];
     function compile(line,index){
         line = line.replace(/;.{0,}/i, "").trimEnd(); // trimEnd removes blank space
         if(/.{0,}:/i.test(line)){
+            const slicedLine = line.slice(line.indexOf(":")+1).trimStart();
+            const splitted = slicedLine.split(" ");
+            while(splitted[0] === ""){
+                splitted.shift();
+            }
+            if(splitted.shift()?.toUpperCase() === "ALC"){
+                labelsAddresses[line.substring(0,line.indexOf(":"))] = startingFreeAddress;
+                const nBytes = parseInt(splitted.shift()) || 1;
+                startingFreeAddress += nBytes;
+                return;
+            }
             labelsAddresses[line.substring(0,line.indexOf(":"))] = offset + code.length;
             return compile(line.slice(line.indexOf(":")+1),index);
         }
