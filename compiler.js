@@ -90,17 +90,21 @@ function asm2code(str,offset){
     const labelsAddresses = {};
     const lines = str.split("\n");
     const code = [];
-    for(let i=0;i<lines.length;i++){
-        const line = lines[i].replace(/;.{0,}/i, "").trimEnd(); // trimEnd removes blank space
+    function compile(line,index){
+        line = line.replace(/;.{0,}/i, "").trimEnd(); // trimEnd removes blank space
         if(/.{0,}:/i.test(line)){
-            labelsAddresses[line.substring(0,line.length-1)] = offset + code.length;
-            continue;
+            labelsAddresses[line.substring(0,line.indexOf(":"))] = offset + code.length;
+            return compile(line.slice(line.indexOf(":")+1),index);
         }
         const splitted = line.split(" ");
+        while(splitted[0] === ""){
+            splitted.shift();
+        }
+        if(!splitted[0]) return;
         const op = splitted.shift().toUpperCase();
         const args = splitted.join(" ");
         const argsSplitted = args.split(",");
-        if(!op) continue;
+        if(!op) return;
         if(op == "DB"){
             let readingString = false;
             let buf = "";
@@ -124,7 +128,7 @@ function asm2code(str,offset){
                     code.push(parseInt(argsSplitted[i]));
                 }
             }
-            continue;
+            return;
         }
         let line2 = line;
         if(COMMAND_ALIASES[op])
@@ -147,11 +151,14 @@ function asm2code(str,offset){
                 if(parseInt(argsSplitted2[j]))
                     code.push((parseInt(argsSplitted2[j]) & 0xFF00) >> 8, parseInt(argsSplitted2[j]) & 0xFF);
                 else{
-                    markedAddresses[code.length] = [argsSplitted2[j], i];
+                    markedAddresses[code.length] = [argsSplitted2[j], index];
                     code.push(0,0);
                 }
             }
         }
+    }
+    for(let i=0;i<lines.length;i++){
+        compile(lines[i], i);
     }
     for(const address in markedAddresses){
         const label = markedAddresses[address][0];
