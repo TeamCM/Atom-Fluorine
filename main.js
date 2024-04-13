@@ -10,7 +10,20 @@ bus.addComponent("rom", 0x800, 0xFFFF, rom);
 const cpu = new Processor(bus);
 cpu.reset();
 
-const DEFAULT_CODE = "; Welcome to Atom Processor MkII (Fluorine)!\n\njmp main ; your program starts here\njmp maskable_interrupt ; if maskable interrupt is triggered, jump to the maskable interrupt handler\njmp non_maskable_interrupt ; if maskable interrupt is triggered, jump to the maskable non interrupt handler\n\nmain: ; insert your code here\nhlt\n\nmaskable_interrupt: ; handles a maskable interrupt (interrupts that can be ignored, normally triggered by the program using the INT instruction)\nreti\n\nnon_maskable_interrupt: ; handles a non maskable interrupt (interrupts that can't be ignored, normally triggered because of a error (not in MkII, only on MkI) or hardware specific implementations)\nreti";
+const DEFAULT_CODE = `; Welcome to Atom Fluorine assembly editor!
+
+jmp main ; your program starts here
+jmp maskable_interrupt ; if maskable interrupt is triggered, jump to the maskable interrupt handler
+jmp non_maskable_interrupt ; if maskable interrupt is triggered, jump to the maskable non interrupt handler
+
+main: ; insert your code here
+hlt
+
+maskable_interrupt: ; handles a maskable interrupt (interrupts that can be ignored, normally triggered by the program using the INT instruction)
+reti
+
+non_maskable_interrupt: ; handles a non maskable interrupt (interrupts that can't be ignored, normally triggered because of a error (not implemented in MkII) or hardware specific implementations)
+reti`;
 const noUpdateStackEl = document.querySelector("#noUpdateStack");
 const noUpdateMemoryEl = document.querySelector("#noUpdateMemory");
 const intervalTimeout = document.querySelector("#interval");
